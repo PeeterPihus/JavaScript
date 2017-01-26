@@ -5,7 +5,7 @@
     }
     // luuakse massiv  'en', 'es'
     var supportedLangs = ['en', 'es']; 
-    // luuakse tervitus
+    // luuakse tervitus 
     var greetings = { 
         en: 'Hello',
         es: 'Hola'
