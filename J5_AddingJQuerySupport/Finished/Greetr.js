@@ -1,66 +1,66 @@
 (function(global, $) {
-    // luuakse uus objekt
+    
     var Greetr = function(firstName, lastName, language) {
         return new Greetr.init(firstName, lastName, language);   
     }
-    
-    var supportedLangs = ['en', 'es']; //luuakse massiiv en ja es.
-    
-    var greetings = { //luuakse tava tervitus
+    // luuakse massiv  'en', 'es'
+    var supportedLangs = ['en', 'es']; 
+    // luuakse tervitus
+    var greetings = { 
         en: 'Hello',
         es: 'Hola'
     };
-    
-    var formalGreetings = { // luuakse viisakas tervitus
+    // luuakse viisakas tervitus
+    var formalGreetings = { 
         en: 'Greetings',
         es: 'Saludos'
     };
-    
-    var logMessages = { // luuakse sisselogimsel vastav sõne.
+    //luuakse sisselogimisel keelevalikust olenevalt kirje
+    var logMessages = { 
         en: 'Logged in',
         es: 'Inició sesión'
     };
-    
-    Greetr.prototype = { // prototyybi loomine et hoida meetodeid ning vähendada mälu kasutust.
-        
-        fullName: function() { // luuakse funktsioon mis tagastab eesnime ja perekonnanime. This viitab prototyybi enda meetoditele.
+    // siin saavad meetodid samad atribuudid mis on genereeritud all 
+    Greetr.prototype = { 
+        // luuakse funktsioon mis tagastab täisnime
+        fullName: function() { 
             return this.firstName + ' ' + this.lastName;   
         },
-        
-        validate: function() { // valideeritakse funktsioon , mis kontrollib keelevalikut.
+        // luuakse funktsioon mis vaatab kas keel mida sisestatakse on õige, kui ei ole õige , siis väljastatakse sõne "invalid language"
+        validate: function() { 
              if (supportedLangs.indexOf(this.language)  === -1) {
                 throw "Invalid language";   
              }
         },
-        
-        greeting: function() { // tervitus funktsioon mis väljastab objektilt sõne.
+        // luuakse terivuts funktsioon, millega väljastakse tervitus vastavalt keelele mis ollakse valitud ja see jörel eesnimi
+        greeting: function() { 
             return greetings[this.language] + ' ' + this.firstName + '!';
         },
-        
-        formalGreeting: function() { // sama mis eelmine aga väljastab viisaka tervituse
+        // luuakse viisakustervitus funktsioon, mis viitab valitud keelele ning see järel täis nimi
+        formalGreeting: function() {
             return formalGreetings[this.language] + ', ' + this.fullName();  
         },
-        
-        greet: function(formal) { // jadalähtestusega meetodid väljastavad enda objektid
+        // luuakse funktsioon greet mille põhjal väljastatakse kas viisakas tervitus või tavaline tervitus
+        greet: function(formal) { 
             var msg;
             
-            // if undefined or null it will be coerced to 'false' - // kui on fomraalne tervitus  siis väljastatakse see
+            // if undefined or null it will be coerced to 'false' kui peaks olema undefined või null siis on "vale",
             if (formal) {
                 msg = this.formalGreeting();  
             }
             else {
-                msg = this.greeting();  // kui ei ole siis väljastatakse tavatervitus
+                msg = this.greeting();  
             }
 
             if (console) {
                 console.log(msg);
             }
 
-            // 'this' refers to the calling object at execution time
+            // 'this' refers to the calling object at execution time // this viitab objekti väljakutsumise täitmisele ja teeb meetodi jadas töötavaks
             // makes the method chainable
             return this;
         },
-        
+        // logi funktsioon kus salvestatakse "this" keelevalik ja "this" täisnimi
         log: function() {
             if (console) {
                 console.log(logMessages[this.language] + ': ' + this.fullName()); 
@@ -76,25 +76,26 @@
             
             return this;
         },
-        
-        HTMLGreeting: function(selector, formal) { // luuakse uus functioon millel on klassi selektor ja tervitusviis
-            if (!$) { // kui jquery't ei ole siis antakse sõne mis ütleb et jqueryt ei laetud 2ra.
+        // luuakse uus functioon millel on klassi selektor ja tervitusviis
+        HTMLGreeting: function(selector, formal) { 
+            // kui jquery't ei ole siis antakse teade mis ütleb et jqueryt ei laetud ära
+            if (!$) { 
                 throw 'jQuery not loaded';   
             }
-            
-            if (!selector) { // kui selektorit ei ole olemas kuvatakse sõne puudub jquery selektor
+            // kui selektorit ei ole olemas kuvatakse sõne 'puudub jquery selektor'
+            if (!selector) { 
                 throw 'Missing jQuery selector';   
             }
-            
-            var msg; //otsustab kuvatava sõne tüübi. kas viisakas v tavatervitus.
+            //otsustab kuvatava sõne tüübi. kas viisakas või tavaline
+            var msg; 
             if (formal) {
                 msg = this.formalGreeting();   
             }
             else {
                 msg = this.greeting();   
             }
-
-            $(selector).html(msg); //sisestatakse vastav sõne sellesse fomraati ja kohta kuhu vaja.Document object model'isse.
+            //sisestatakse vastav sõne sellesse fomraati ja kohta kuhu vaja
+            $(selector).html(msg); 
             
             return this;
         }
